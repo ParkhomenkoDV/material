@@ -21,4 +21,5 @@ setup(
     packages=[name],
     python_requires='>=3.8',
     install_requires=install_requires,
+    package_data={name:['hardness.xlsx'], }
 )
