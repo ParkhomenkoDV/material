@@ -18,7 +18,7 @@ REFERENCES = MappingProxyType({
 T0 = 273.15  # абсолютный температурный ноль
 M = 10 ** 6  # приставка Мега
 
-hardness = pd.read_excel('hardness.xlsx').drop(['d10mm'], axis=1)  # [1, c.784]
+hardness = pd.read_excel('./hardness.xlsx').drop(['d10mm'], axis=1)  # [1, c.784]
 
 
 class Material:
