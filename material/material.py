@@ -1,10 +1,4 @@
-"""
-Список литературы:
-
-[1] = Марочник сталей и сплавов.
-2-е изд., исправл. и доп. / Зубченко А.С., Колосков М.М., Каширский Ю.В. и др. Под ред. А.С. Зубченко.
-М.: Машиностроение, 2003. 784 с.
-"""
+from types import MappingProxyType  # неизменяемый словарь
 
 from colorama import Fore
 import pandas as pd
@@ -14,10 +8,17 @@ from numpy import array, nan, isnan, sqrt, arange, linspace
 from scipy import interpolate
 import matplotlib.pyplot as plt
 
+# Список использованной литературы
+REFERENCES = MappingProxyType({
+    1: '''Марочник сталей и сплавов.
+2-е изд., исправл. и доп. / Зубченко А.С., Колосков М.М., Каширский Ю.В. и др. Под ред. А.С. Зубченко.
+М.: Машиностроение, 2003. 784 с.''',
+})
+
 T0 = 273.15  # абсолютный температурный ноль
 M = 10 ** 6  # приставка Мега
 
-hardness = pd.read_excel('libraries/Hardness.xlsx').drop(['d10mm'], axis=1)  # [1, c.784]
+hardness = pd.read_excel('hardness.xlsx').drop(['d10mm'], axis=1)  # [1, c.784]
 
 
 class Material:
