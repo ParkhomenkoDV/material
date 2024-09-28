@@ -12,8 +12,12 @@ import matplotlib.pyplot as plt
 # Список использованной литературы
 REFERENCES = MappingProxyType({
     1: '''Марочник сталей и сплавов.
-2-е изд., исправл. и доп. / Зубченко А.С., Колосков М.М., Каширский Ю.В. и др. Под ред. А.С. Зубченко.
-М.: Машиностроение, 2003. 784 с.''',
+    2-е изд., исправл. и доп. / Зубченко А.С., Колосков М.М., Каширский Ю.В. и др. Под ред. А.С. Зубченко.
+    М.: Машиностроение, 2003. 784 с.''',
+    2: '''Справочник по конструкционным материалам:
+    Справочник / Б.Н. Арзамасов, Т.В. Соловьева, С.А. Герасимов и др.;
+    Под ред. Б.Н. Арзамасова, Т.В. Соловьевой.
+    - М.: Изд-во МГТУ им Н.Э. Баумана, 2006. с.: ил.''',
 })
 
 T0 = 273.15  # абсолютный температурный ноль
@@ -24,34 +28,100 @@ hardness = pd.read_excel(os.path.join(HERE, 'hardness.xlsx')).drop(['d10mm'], ax
 
 
 class Material:
-    __PARAMETERS = {'density': 'плотность [кг/м^3]',
-                    'alpha': 'коэффициент линейного расширения [1/К]',
-                    'E': 'модуль Юнга I рода [Па]',
-                    'G': 'модуль (сдвига) Юнга II рода [Па]',
-                    'mu': 'коэффициент Пуассона []',
-                    'sigma_t': 'предел текучести [Па]',
-                    'sigma_s': 'предел прочности [Па]',
-                    'conductivity': 'теплопроводность [Вт/м/К]',
-                    'heat_capacity': 'теплоемкость [Дж/кг/К]',
-                    'KCU': 'ударная вязкость [Дж/м^2]',
-                    'HB': 'твердость по Бринеллю [Па]',
-                    'HRC': 'твердость по Роквеллу [Па]',
-                    'HV': 'твердость по Виккерсу [Па]',
-                    '*': 'частный параметр [...]'}
+    __PARAMETERS = {
+        'density': {
+            'description': 'плотность',
+            'unit': '[кг/м^3]',
+            'type': (int, float, np.number),
+            'assert': (lambda density: '' if 0 < density else f'0 < density',), },
+        'alpha': {
+            'description': 'коэффициент линейного расширения',
+            'unit': '[1/К]',
+            'type': (int, float, np.number),
+            'assert': (lambda alpha: '' if 0 <= alpha else f'0 <= alpha',), },
+        'E': {
+            'description': 'модуль Юнга I рода',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda E: '' if 0 < E else f'0 < E',), },
+        'G': {
+            'description': 'модуль (сдвига) Юнга II рода',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda G: '' if 0 < G else f'0 < G',), },
+        'mu': {
+            'description': 'коэффициент Пуассона',
+            'unit': '[]',
+            'type': (int, float, np.number),
+            'assert': (lambda mu: '' if 0 < mu else f'0 < mu',), },
+        'sigma_t': {
+            'description': 'предел текучести',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda sigma_t: '' if 0 < sigma_t else f'0 < sigma_t',), },
+        'sigma_s': {
+            'description': 'предел прочности',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda sigma_s: '' if 0 < sigma_s else f'0 < sigma_s',), },
+        'l': {
+            'description': 'теплопроводность',
+            'unit': '[Вт/м/К]',
+            'type': (int, float, np.number),
+            'assert': (lambda l: '' if 0 < l else f'0 < l',), },
+        'C': {
+            'description': 'теплоемкость',
+            'unit': '[Дж/К]',
+            'type': (int, float, np.number),
+            'assert': (lambda C: '' if 0 < C else f'0 < C',), },
+        'c': {
+            'description': 'удельная теплоемкость',
+            'unit': '[Дж/кг/К]',
+            'type': (int, float, np.number),
+            'assert': (lambda c: '' if 0 < c else f'0 < c',), },
+        'KCU': {
+            'description': 'ударная вязкость',
+            'unit': '[Дж/м^2]',
+            'type': (int, float, np.number),
+            'assert': (lambda KCU: '' if 0 < KCU else f'0 < KCU',), },
+        'HB': {
+            'description': 'твердость по Бринеллю',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda HB: '' if 0 < HB else f'0 < HB',), },
+        'HRC': {
+            'description': 'твердость по Роквеллу',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda HRC: '' if 0 < HRC else f'0 < HRC',), },
+        'HV': {
+            'description': 'твердость по Виккерсу',
+            'unit': '[Па]',
+            'type': (int, float, np.number),
+            'assert': (lambda HV: '' if 0 < HV else f'0 < HV',), },
+        '*': {
+            'description': 'частный параметр',
+            'unit': '[...]',
+            'type': (int, float, np.number, str, bool),
+            'assert': tuple(), }
+    }
 
     @classmethod
     def __version__(cls):
-        version = '3.0'
+        version = '4.0'
         print(version)
 
     @classmethod
     def help(cls):
         print(Fore.CYAN + 'Material parameters:' + Fore.RESET)
-        for k, v in Material.__PARAMETERS.items():
-            print('\t' + f'{k}: {v}')
         print(Fore.RED + 'type value must be int, float, array with shape (-1,2) or callable(int | float)' + Fore.RESET)
+        for parameter, d in Material.__PARAMETERS.items():
+            print('\t\t' + Fore.CYAN + f'{parameter}' + Fore.RESET)
+            for key, value in d.items():
+                print('\t\t\t' + f'{key}: {value}')
 
-    def __init__(self, name: str, parameters: dict, composition=None, reference='', kind: int = 1, fill_value=nan):
+    def __init__(self, name: str, parameters: dict,
+                 composition=None, reference: str = '', kind: int = 1, fill_value=nan) -> None:
         assert isinstance(name, str)
         self.__name = name
 
@@ -153,19 +223,10 @@ class Material:
             plt.xticks(temperature)
             plt.xlabel('temperature', fontsize=12)
             plt.ylabel(param, fontsize=12)
-            plt.plot(*xy.T)
+            plt.plot(*xy.T, color='black')
 
         plt.show()
 
-
-references = (
-    '''Справочник по конструкционным материалам:
-    Справочник / Б.Н. Арзамасов, Т.В. Соловьева, С.А. Герасимов и др.;
-    Под ред. Б.Н. Арзамасова, Т.В. Соловьевой.
-    - М.: Изд-во МГТУ им Н.Э. Баумана, 2006. с.: ил.''',
-    '''
-    '''
-)
 
 materials = list()
 
@@ -181,7 +242,7 @@ materials.append(Material('ХН70МВТЮБ',
                                                   array((620, 480, 250, 180)) * 10 ** 6)).T,
                               'sigma_200': array((array((650, 700, 800, 850)) + T0,
                                                   array((600, 420, 230, 230)) * 10 ** 6)).T, },
-                          reference=references[0] + ', c. 412-413'))
+                          reference=REFERENCES[2] + ', c. 412-413'))
 materials.append(Material('ХН80ТБЮ',
                           {
                               'sigma_s': array((array((29, 500, 600, 630, 650, 700)) + T0,
@@ -196,7 +257,7 @@ materials.append(Material('ХН80ТБЮ',
                                                                  kind=1, bounds_error=False, fill_value=nan),
                               'sigma_10000': interpolate.interp1d(array((650, 700)) + T0, array((280, 170)) * M,
                                                                   kind=1, bounds_error=False, fill_value=nan), },
-                          reference=references[0] + ', c. 413'))
+                          reference=REFERENCES[2] + ', c. 413'))
 materials.append(Material('ХН70ВМТЮ',
                           {
                               'sigma_s': array((array((20, 500, 600, 650, 700, 750, 800, 900, 950, 1000)) + T0,
@@ -224,8 +285,26 @@ materials.append(Material('ХН70ВМТЮ',
                                                                   kind=3, fill_value=nan, bounds_error=False),
                               'sigma_20000': interpolate.interp1d(array((600, 650, 750)) + T0,
                                                                   array((500, 340, 190)) * M,
-                                                                  kind=2, fill_value=nan, bounds_error=False)},
-                          reference=references[0] + ', c. 414-415'))
+                                                                  kind=2, fill_value=nan, bounds_error=False), },
+                          reference=REFERENCES[2] + ', c. 414-415'))
+materials.append(Material('ХН55ВМКЮ',
+                          {
+                              'sigma_s': array((array((20, 700, 750, 800, 850, 900, 950, 1000)) + T0,
+                                                array((1100, 1080, 1080, 1000, 750, 650, 550, 350)) * M)).T,
+                              'sigma_t': array((array((20, 700, 750, 800, 850, 900, 950, 1000)) + T0,
+                                                array((750, 750, 750, 700, 650, 500, 400, 250)) * M)).T,
+                              'KCU': array((array((20, 700, 750, 800, 850, 900, 950, 1000)) + T0,
+                                            array((0.2, 0.3, 0.3, 0.3, 0.3, 0.4, 0.4, 0.4)) * M)).T,
+                              'sigma_100': interpolate.interp1d(array((800, 900, 950)) + T0,
+                                                                array((440, 240, 140)) * M,
+                                                                kind=2, fill_value=nan, bounds_error=False),
+                              'sigma_1000': interpolate.interp1d(array((800, 900, 950)) + T0,
+                                                                 array((310, 130, 65)) * M,
+                                                                 kind=2, fill_value=nan, bounds_error=False),
+                              'sigma_2000': interpolate.interp1d(array((800, 900, 950)) + T0,
+                                                                 array((290, 100, 55)) * M,
+                                                                 kind=2, fill_value=nan, bounds_error=False), },
+                          reference=REFERENCES[2] + ', c. 415'))
 
 
 def test():
@@ -245,8 +324,8 @@ def test():
                             "mu": interpolate.interp1d(arange(400, 800 + 1, 100),
                                                        (0.384, 0.379, 0.371, 0.361, 0.347),
                                                        kind=3, bounds_error=False, fill_value='extrapolate'),
-                            "heat_capacity": lambda t: 4200,  # lambda
-                            "conductivity": ((0, 16), (100, 18), (200, 19), (400, 19.5)),  # tuple
+                            "c": lambda t: 4200,  # lambda
+                            "l": ((0, 16), (100, 18), (200, 19), (400, 19.5)),  # tuple
                             "HV": array(((0, 16), (100, 18), (200, 19), (400, 19.5))),  # array
                             "smth": 3.1415  # float
                         })
