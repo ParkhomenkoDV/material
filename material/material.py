@@ -305,6 +305,43 @@ materials.append(Material('ХН55ВМКЮ',
                                                                  array((290, 100, 55)) * M,
                                                                  kind=2, fill_value=nan, bounds_error=False), },
                           reference=REFERENCES[2] + ', c. 415'))
+materials.append(Material('10Х18Н9Т',
+                          {
+                              'sigma_s': array((array((20, 650, 800, 900, 1000, 1100)) + T0,
+                                                array((554, 320, 185, 91, 55, 38)) * M)).T,
+                              'KCU': array((array((20, 650, 800, 900, 1000, 1100)) + T0,
+                                            array((1.25, 1.96, 2.59, 2.36, 2.06, 1.51)) * M)).T,
+                              'sigma_100000': interpolate.interp1d(array((600, 650, 700)) + T0,
+                                                                   array((110, 70, 45)) * M,
+                                                                   kind=2, fill_value=nan, bounds_error=False), },
+                          reference=REFERENCES[2] + ', c. 402'))
+materials.append(Material('08Х18Н12М3Т',
+                          {
+                              'sigma_1': interpolate.interp1d(array((650, 700, 760, 815, 870, 980)) + T0,
+                                                              array((350, 270, 210, 145, 120, 58)) * M,
+                                                              kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_10': interpolate.interp1d(array((650, 700, 760, 815, 870, 980)) + T0,
+                                                               array((270, 210, 145, 105, 77, 35)) * M,
+                                                               kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_100': interpolate.interp1d(array((650, 700, 760, 815, 870, 980)) + T0,
+                                                                array((220, 164, 110, 77, 52, 19)) * M,
+                                                                kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_300': interpolate.interp1d(array((650, 700, 760, 815, 870, 980)) + T0,
+                                                                array((196, 155, 83, 66, 42, 13)) * M,
+                                                                kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_500': interpolate.interp1d(array((650, 700, 760, 815, 870, 980)) + T0,
+                                                                array((189, 140, 84, 61, 39, 10)) * M,
+                                                                kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_1000': interpolate.interp1d(array((650, 700, 760, 815, 870, 980)) + T0,
+                                                                 array((182, 126, 73, 49, 30, 8.4)) * M,
+                                                                 kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_10000': interpolate.interp1d(array((650, 700, 760, 815)) + T0,
+                                                                  array((140, 84, 49, 23)) * M,
+                                                                  kind=3, fill_value=nan, bounds_error=False),
+                              'sigma_100000': interpolate.interp1d(array((650, 700, 760, 815)) + T0,
+                                                                   array((112, 62, 30, 11)) * M,
+                                                                   kind=3, fill_value=nan, bounds_error=False), },
+                          reference=REFERENCES[2] + ', c. 402'))
 
 
 def test():
